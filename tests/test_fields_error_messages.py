@@ -9,8 +9,11 @@ def test_invalid_email_error_msg(invalid_user_validator):
     user = invalid_user_validator
     user.is_valid()
 
-    passed, error_msg = TestValidators.is_email(user.data['email'])
+    passed, error_msg = TestValidators.is_email(user._data['email'])
     user_errors = user.errors['email']
 
     assert len(user_errors) == 1
     assert error_msg in user_errors
+
+    error_str = user.error_str()
+    assert isinstance(error_str, str) and error_msg in error_str

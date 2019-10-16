@@ -24,7 +24,7 @@ with open_local(['README.rst']) as rm:
     long_description = rm.read()
 
 setup(
-    name='simple-validator',
+    name='validator',
     version=version,
     packages=['validator'],
     platforms='any',

@@ -8,9 +8,9 @@ def test_fields_are_valid(user_validator):
     assert user_validator.is_valid()
 
     # Tests that keys are in data.
-    assert 'email' in user_validator.data
-    assert 'age' in user_validator.data
-    assert 'height' in user_validator.data
+    assert 'email' in user_validator._data
+    assert 'age' in user_validator._data
+    assert 'height' in user_validator._data
 
 
 def test_fields_are_invalid(invalid_user_validator):

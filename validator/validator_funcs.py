@@ -1,11 +1,7 @@
+# encoding=utf-8
 
 
-# Constant Type.
-validator_tuple = tuple()
-
-
-class TestValidators:
-    """ Utility class for storing validators that return False. """
+class ValidatorFuncs(object):
 
     @staticmethod
     def is_email(val):
@@ -41,6 +37,19 @@ class TestValidators:
         return validator
 
     @staticmethod
+    def is_max_length(max_length):
+        def validator(val):
+            passed = False
+            err = "{val} must be at most {max_length} characters in length".format(val=val, max_length=max_length)
+
+            if len(val) <= max_length:
+                passed = True
+
+            return passed, err
+
+        return validator
+
+    @staticmethod
     def is_gt_than(num):
         def validator(val):
             passed = False
@@ -60,6 +69,19 @@ class TestValidators:
             err = "{val} must be greater than {flr} and less than {ceil}".format(val=val, flr=flr, ceil=ceil)
 
             if flr < val < ceil:
+                passed = True
+
+            return passed, err
+
+        return validator
+
+    @staticmethod
+    def is_in(enum_vals):
+        def validator(val):
+            passed = False
+            err = "{val} must in {vals}.".format(val=val, vals=enum_vals)
+
+            if val in enum_vals:
                 passed = True
 
             return passed, err

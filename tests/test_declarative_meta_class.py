@@ -15,16 +15,16 @@ def test_declared_fields_in_fields_attr(user_validator):
     """
     This tests that fields contain the key names of defined Fields.
     """
-    assert len(user_validator.fields) == 3
-    assert 'email' in user_validator.fields
-    assert 'age' in user_validator.fields
-    assert 'height' in user_validator.fields
+    assert len(user_validator._fields) == 3
+    assert 'email' in user_validator._fields
+    assert 'age' in user_validator._fields
+    assert 'height' in user_validator._fields
 
 
 def test_Field_as_values_in_fields_attr(user_validator):
     """
-    This tests that user_validators.fields.values() are all Fields.
+    This tests that user_validators._fields.values() are all Fields.
     """
-    values = [val for val in user_validator.fields.values()]
+    values = [val for val in user_validator._fields.values()]
     for val in values:
         assert isinstance(val, Field)

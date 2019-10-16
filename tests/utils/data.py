@@ -14,3 +14,7 @@ missing_email_data = {
     'age':    25,
     'height': 72
 }
+
+missing_email_and_age_data = {
+    'height': 88
+}

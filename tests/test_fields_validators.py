@@ -11,7 +11,7 @@ def test_field_validator_functions(user_validator):
         check because it returns a closure, but just knowing that the static
         functions are present in the fields validators list is good enough.
     """
-    email_field = user_validator.fields['email']
+    email_field = user_validator._fields['email']
 
     assert TestValidators.is_email in email_field.validators
 
@@ -21,4 +21,20 @@ def test_field_attribute_after_validation(user_validator):
 
     user_validator.is_valid()
 
-    assert user_validator.email == user_validator.data['email']
+    assert user_validator.email == user_validator._data['email']
+
+
+def test_field_to_dict(user_validator):
+    user_validator.is_valid()
+    res = user_validator.to_dict()
+    assert isinstance(res, dict) and len(res) == 3
+
+    res = user_validator.to_dict(fields=["email", "age"])
+    assert isinstance(res, dict) and len(res) == 2 and "email" in res
+
+    user_validator.age = 33
+    res = user_validator.to_dict()
+    assert res["age"] == 33
+
+    # test __getitem__ get value
+    assert user_validator["age"] == 33

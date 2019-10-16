@@ -1,7 +1,7 @@
 import pytest
 
 from . import data
-from .validators import UserValidator
+from .validators import UserValidator, DefaultValUserValidator
 
 
 @pytest.fixture
@@ -26,3 +26,8 @@ def missing_user_validator():
     Missing data user validator.
     """
     return UserValidator(data.missing_email_data)
+
+
+@pytest.fixture
+def missing_user_validator_1():
+    return DefaultValUserValidator(data.missing_email_and_age_data)

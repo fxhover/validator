@@ -1,4 +1,5 @@
-from typing import Any
+# encoding=utf-8
+
 from collections import OrderedDict
 
 FORMATTED_TYPE_NAMES = {
@@ -27,34 +28,33 @@ class DeclarativeFieldsMetaclass(type):
 
         """
         declared_fields = []
-        required_fields = []
+        # required_fields = []
 
         for key, val in list(attrs.items()):
             if isinstance(val, Field):
-                if val.required:
-                    required_fields.append((key, val))
+                # if val.required:
+                #     required_fields.append((key, val))
                 declared_fields.append((key, val))
                 attrs.pop(key)
 
         # Attach collected lists to attrs before object creation.
-        attrs['fields'] = OrderedDict(declared_fields)
-        attrs['required_fields'] = OrderedDict(required_fields)
+        attrs['_fields'] = OrderedDict(declared_fields)
+        # attrs['_required_fields'] = OrderedDict(required_fields)
 
-        new_class = super().__new__(mcs, name, bases, attrs)
+        new_class = super(DeclarativeFieldsMetaclass, mcs).__new__(mcs, name, bases, attrs)
         return new_class
 
 
 class Field:
     """ Validation Field. """
 
-    def __init__(self, data_type: type = None,
-                 validators: list = [],
-                 required: bool = False) -> None:
+    def __init__(self, data_type=None, validators=None, required=False, default=None):
         self.data_type = data_type
-        self.validators = validators
+        self.validators = validators or []
         self.required = required
+        self.default = default
 
-    def validate_type(self, val: Any):
+    def validate_type(self, val):
         """ Validates field data type
 
         :param val: Value passed for checking
@@ -67,8 +67,7 @@ class Field:
         # A single valid data type
         if (type(self.data_type) != list) and (type(val) != self.data_type):
             formatted = FORMATTED_TYPE_NAMES[self.data_type.__name__]
-            err = "'{}' is expected to be a '{}'".format(val,
-                                                         formatted)
+            err = "'{}' is expected to be a '{}'".format(val, formatted)
 
         # Multiple valid types are passed as a list
         elif (type(self.data_type) == list) and (type(val) not in self.data_type):
@@ -77,7 +76,7 @@ class Field:
 
         return err
 
-    def validate(self, val: Any) -> list:
+    def validate(self, val):
         """ Validates value by passing into all validators
 
         :param val: Value to pass into validators
@@ -86,12 +85,15 @@ class Field:
         :return: Errors or empty list.
         :rtype: list
         """
-        errors: list = []
+        errors = []
+
+        if (not self.required) and val is None:
+            return errors
 
         if self.data_type:
             err_msg = self.validate_type(val)
 
-            if err_msg:	# There was an error
+            if err_msg:	 # There was an error
                 errors.append(err_msg)
                 return errors
 
@@ -102,3 +104,12 @@ class Field:
                 errors.append(err)
 
         return errors
+
+    def default_val(self):
+        """Get default value"""
+        if not self.default:
+            return None
+        if callable(self.default):
+            return self.default()
+        else:
+            return self.default
