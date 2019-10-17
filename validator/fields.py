@@ -49,6 +49,8 @@ class Field:
     """ Validation Field. """
 
     def __init__(self, data_type=None, validators=None, required=False, default=None):
+        if data_type == str:
+            data_type = [str, unicode]  # support unicode
         self.data_type = data_type
         self.validators = validators or []
         self.required = required
@@ -70,8 +72,8 @@ class Field:
 
         # Multiple valid types are passed as a list
         elif (type(self.data_type) == list) and (type(val) not in self.data_type):
-               error_msg = " or ".join([self.formated_data_type(t) for t in self.data_type])
-               err = "'{}' is expected to be a '{}'".format(val, error_msg)
+           error_msg = " or ".join([self.formated_data_type(t) for t in self.data_type])
+           err = "'{}' is expected to be a '{}'".format(val, error_msg)
 
         return err
 

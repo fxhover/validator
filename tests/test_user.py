@@ -42,6 +42,7 @@ class UserParams(Validator):
         default=1
     )
     post = Field(data_type=Post, required=True)
+    any = Field(required=True)
 
 
 user_params = UserParams({
@@ -49,7 +50,8 @@ user_params = UserParams({
     "email": "xxx",
     "age": 9,
     # "sex": "其他"
-    "post": Post()
+    "post": Post(),
+    "any": "abcd"
 })
 
 
@@ -68,3 +70,5 @@ print(user_params["username"])
 
 # 自动填充默认值
 print(user_params.status)
+
+print(user_params.any)
