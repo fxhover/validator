@@ -3,6 +3,10 @@
 from validator import Validator, Field, ValidatorFuncs
 
 
+class Post(object):
+    pass
+
+
 class UserParams(Validator):
     """
     User params validator.
@@ -37,6 +41,7 @@ class UserParams(Validator):
         validators=[ValidatorFuncs.is_in([0, 1])],
         default=1
     )
+    post = Field(data_type=Post, required=True)
 
 
 user_params = UserParams({
@@ -44,6 +49,7 @@ user_params = UserParams({
     "email": "xxx",
     "age": 9,
     # "sex": "其他"
+    "post": Post()
 })
 
 

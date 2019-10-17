@@ -66,15 +66,21 @@ class Field:
 
         # A single valid data type
         if (type(self.data_type) != list) and (type(val) != self.data_type):
-            formatted = FORMATTED_TYPE_NAMES[self.data_type.__name__]
-            err = "'{}' is expected to be a '{}'".format(val, formatted)
+            err = "'{}' is expected to be a '{}'".format(val, self.formated_data_type(self.data_type))
 
         # Multiple valid types are passed as a list
         elif (type(self.data_type) == list) and (type(val) not in self.data_type):
-               error_msg = " or ".join([FORMATTED_TYPE_NAMES[t.__name__] for t in self.data_type])
+               error_msg = " or ".join([self.formated_data_type(t) for t in self.data_type])
                err = "'{}' is expected to be a '{}'".format(val, error_msg)
 
         return err
+
+    def formated_data_type(self, data_type):
+        """Format data type name"""
+        if data_type in FORMATTED_TYPE_NAMES:
+            return FORMATTED_TYPE_NAMES[data_type.__name__]
+        else:
+            return data_type.__name__
 
     def validate(self, val):
         """ Validates value by passing into all validators
