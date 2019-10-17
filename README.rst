@@ -7,7 +7,7 @@ A simple way to validate dictionary values by using functions.
 
 Installation
 ------------
-- ``pip3 install simple-validator``
+- ``pip install validator``
 
 
 Usage
@@ -19,7 +19,7 @@ There are 2 main classes to create custom validation classes(``Field``, ``Valida
     from validator import Field, Validator
 
 
-    def is_valid_email(val: str):
+    def is_valid_email(val):
         """ A horrible way to check if a string is a valid email. """
         passed = False
         err_msg = "{} isn't a valid email.".format(val)
